@@ -3,21 +3,22 @@ use std::cmp;
 
 // utils
 fn get_primes(n: i64) -> Vec<i64> {
-    let mut primes = vec!();
-    let mut not_primes = HashSet::new();
+    let mut primes: Vec<i64> = vec!();
+    let mut not_primes = vec![1; (n+2) as usize];
     let mut i = 2;
     loop {
-        if not_primes.contains(&i) == false {
-            primes.push(i);
+        if not_primes[i] == 1 {
+            primes.push(i as i64);
+            // assume its a prime
             let mut j = i;
             loop {
-                not_primes.insert(j);
-                if j > n { break }
                 j += i;
+                if j > (n as usize) { break }
+                not_primes[j] = 0;
             }
         }
         i += 1;
-        if i > n { break }
+        if i > (n as usize) { break }
     }
     primes
 }
