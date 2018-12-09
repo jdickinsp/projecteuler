@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::cmp;
 
 // utils
-fn primes(n: i64) -> Vec<i64> {
+fn get_primes(n: i64) -> Vec<i64> {
     let mut primes = vec!();
     let mut not_primes = HashSet::new();
     let mut i = 2;
@@ -129,7 +129,7 @@ What is the smallest positive number that is evenly divisible by all of the numb
 fn problem_5() -> i64 {
     let mut c = 1;
     let h = 20;
-    let p = primes(20);
+    let p = get_primes(20);
     let mut prime_product = 1;
     for i in p {
         prime_product = prime_product * i;
@@ -171,7 +171,7 @@ fn problem_6() -> i64 {
 What is the 10 001st prime number?
 */
 fn problem_7() -> i64 {
-    let p = primes(120000);
+    let p = get_primes(120000);
     p[10_001-1]
 }
 
@@ -225,6 +225,56 @@ fn problem_8() -> i64 {
 }
 
 
+/*
+There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+Find the product abc.
+*/
+fn problem_9() -> i64 {
+    let n = 200000;
+    let mut i = 0;
+    let mut seq = vec!();
+    loop {
+        let j = i*i;
+        if j > n { break }
+        seq.push(j);
+        i += 1;
+    }
+    for i in 0..seq.len() {
+        for j in i..seq.len() {
+            let s = i*i + j*j;
+            let k_res = seq.binary_search_by(|probe| probe.cmp(&s));
+            if k_res.is_ok() {
+                let k = k_res.unwrap();
+                let sum = i + j + k;
+                if sum == 1000 {
+                    return (i*j*k) as i64;
+                }
+            }
+
+        }
+    }
+    0
+}
+
+
+/*
+Find the sum of all the primes below two million.
+*/
+fn problem_10() -> i64 {
+    let n = 2_000_000;
+    let primes = get_primes(n);
+    let mut s = 0;
+    for p in primes.iter() {
+        if *p > n { break }
+        s += p;
+    }
+    s
+}
+
+
+
+
+
 fn solutions() {
     let answer1 = problem_1();
     let answer2 = problem_2();
@@ -238,6 +288,6 @@ fn solutions() {
 
 fn main() {
     // solutions();
-    let answer = problem_8();
+    let answer = problem_10();
     println!("{}", answer);
 }
