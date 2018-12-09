@@ -1,4 +1,29 @@
 use std::collections::HashSet;
+use std::cmp;
+
+// utils
+fn primes(n: i64) -> Vec<i64> {
+    let mut primes = vec!();
+    let mut not_primes = HashSet::new();
+    let mut i = 2;
+    loop {
+        if not_primes.contains(&i) == false {
+            primes.push(i);
+            let mut j = i;
+            loop {
+                not_primes.insert(j);
+                if j > n { break }
+                j += i;
+            }
+        }
+        i += 1;
+        if i > n { break }
+    }
+    // println!("not_primes {:?}", not_primes);
+    primes
+}
+
+
 
 // solves project euler projects
 
@@ -45,19 +70,17 @@ fn problem_2() -> i64 {
 The prime factors of 13195 are 5, 7, 13 and 29.
 What is the largest prime factor of the number 600851475143 ?
 */
-
 fn problem_3() -> i64 {
-    // let n = 13195;
     let n: i64 = 600851475143;
     let mut primes = vec!();
     let mut t = n;
     let mut i = 2;
     loop {
-        if (t % i == 0) {
+        if t % i == 0 {
             t = t / i;
             primes.push(i);
         }
-        if (t <= 1) {
+        if t <= 1 {
             break
         }
         i += 1;
@@ -66,10 +89,84 @@ fn problem_3() -> i64 {
 }
 
 
+/*
+A palindromic number reads the same both ways.
+The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+Find the largest palindrome made from the product of two 3-digit numbers.
+*/
+fn is_palindrome(n: i64) -> bool {
+    let n_str = n.to_string();
+    let n_len = n_str.len() as i64;
+    if n_len < 2 {
+        return false;
+    }
+    let half: i64 = n_len / 2;
+    for i in 0..half {
+        if n_str.chars().nth(i as usize) != n_str.chars().nth((n_len - 1 - i) as usize) {
+            return false;
+        }
+    }
+    true
+}
+fn problem_4() -> i64 {
+    let mut palindrome = 0;
+    for i in (0..999).rev() {
+        for j in (0..999).rev() {
+            let t = i * j;
+            if is_palindrome(t) {
+                palindrome = cmp::max(palindrome, t);
+            }
+        }
+    }
+    palindrome
+}
+
+
+/*
+2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+*/
+fn problem_5() -> i64 {
+    let mut c = 1;
+    let h = 20;
+    let p = primes(20);
+    let mut prime_product = 1;
+    for i in p {
+        prime_product = prime_product * i;
+    }
+    let mut x;
+    loop {
+        x = prime_product * c;
+        c += 1;
+        let mut divisible = true;
+        for i in 2..h {
+            if x % i != 0 {
+                divisible = false;
+                break
+            }
+        }
+        if divisible { break }
+    }
+    x
+}
+
+
+fn solutions() {
+    let answer1 = problem_1();
+    assert_eq!(answer1, 233168);
+    let answer2 = problem_2();
+    assert_eq!(answer2, 4613732);
+    let answer3 = problem_3();
+    println!("{}", answer3);
+}
+
+
 
 fn main() {
+    solutions();
     // let answer = problem_2();
-    // let answer = problem_2();
-    let answer = problem_3();
+    // let answer = problem_3();
+    // let answer = problem_4();
+    let answer = problem_5();
     println!("{}", answer);
 }
