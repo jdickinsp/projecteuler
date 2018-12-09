@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 // solves project euler projects
 
 /*
@@ -43,30 +45,24 @@ fn problem_2() -> i64 {
 The prime factors of 13195 are 5, 7, 13 and 29.
 What is the largest prime factor of the number 600851475143 ?
 */
+
 fn problem_3() -> i64 {
-    let n = 13195;
-    // let n: i64 = 600851475143;
-    let mut xs: Vec<_> = vec!();
-    for i in 2..n {
-        xs.push(i);
+    // let n = 13195;
+    let n: i64 = 600851475143;
+    let mut primes = vec!();
+    let mut t = n;
+    let mut i = 2;
+    loop {
+        if (t % i == 0) {
+            t = t / i;
+            primes.push(i);
+        }
+        if (t <= 1) {
+            break
+        }
+        i += 1;
     }
-    // filter out primes
-    let mut i = 0;
-    // loop {
-    //     let p = xs[i];
-    //     xs = xs.iter().filter(|&x| *x == p || x%p != 0).map(|x| *x).collect();
-    //     i += 1;
-    //     if i >= xs.len() { break; }
-    // }
-    let mut high_prime = 2;
-    // for i in xs.iter().rev() {
-    //     if n % i == 0 {
-    //         high_prime = *i;
-    //         break
-    //     }
-    // }
-    // println!("{:?}", xs);
-    high_prime
+    primes[primes.len()-1]
 }
 
 
