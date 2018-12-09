@@ -1,0 +1,6 @@
+[package]
+name = "projecteuler"
+version = "0.1.0"
+authors = ["trancemachine99 <trancemachine99@gmail.com>"]
+
+[dependencies]
