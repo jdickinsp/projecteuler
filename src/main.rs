@@ -151,22 +151,42 @@ fn problem_5() -> i64 {
 }
 
 
+/*
+Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+*/
+fn problem_6() -> i64 {
+    let n = 100;
+    let mut sum_sq = 0;
+    let mut sum = 0;
+    // sum of squares
+    for i in 1..(n+1) {
+        // println!("{}", i);
+        sum_sq += i*i;
+        sum += i;
+    }
+    sum * sum - sum_sq
+}
+
+
+
 fn solutions() {
     let answer1 = problem_1();
     assert_eq!(answer1, 233168);
     let answer2 = problem_2();
     assert_eq!(answer2, 4613732);
     let answer3 = problem_3();
-    println!("{}", answer3);
+    assert_eq!(answer3, 6857);
+    let answer4 = problem_4();
+    assert_eq!(answer4, 906609);
+    let answer5 = problem_5();
+    assert_eq!(answer5, 232792560);
+    let answer6 = problem_6();
+    assert_eq!(answer6, 25164150);
 }
 
 
-
 fn main() {
-    solutions();
-    // let answer = problem_2();
-    // let answer = problem_3();
-    // let answer = problem_4();
-    let answer = problem_5();
+    // solutions();
+    let answer = problem_6();
     println!("{}", answer);
 }
