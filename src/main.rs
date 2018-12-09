@@ -19,7 +19,6 @@ fn primes(n: i64) -> Vec<i64> {
         i += 1;
         if i > n { break }
     }
-    // println!("not_primes {:?}", not_primes);
     primes
 }
 
@@ -108,6 +107,7 @@ fn is_palindrome(n: i64) -> bool {
     }
     true
 }
+
 fn problem_4() -> i64 {
     let mut palindrome = 0;
     for i in (0..999).rev() {
@@ -167,6 +167,14 @@ fn problem_6() -> i64 {
     sum * sum - sum_sq
 }
 
+/*
+What is the 10 001st prime number?
+*/
+fn problem_7() -> i64 {
+    let p = primes(120000);
+    p[10_001-1]
+}
+
 
 
 fn solutions() {
@@ -182,11 +190,13 @@ fn solutions() {
     assert_eq!(answer5, 232792560);
     let answer6 = problem_6();
     assert_eq!(answer6, 25164150);
+    let answer7 = problem_7();
+    assert_eq!(answer7, 104743);
 }
 
 
 fn main() {
     // solutions();
-    let answer = problem_6();
+    let answer = problem_7();
     println!("{}", answer);
 }
