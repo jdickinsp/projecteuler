@@ -3,6 +3,6 @@ mod euler;
 
 fn main() {
     // euler::problems_1_10::solutions();
-    let answer = euler::problems_11_20::problem_12();
+    let answer = euler::problems_11_20::problem_13();
     println!("{}", answer);
 }
