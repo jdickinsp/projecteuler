@@ -3,6 +3,7 @@ use std::cmp;
 /*
 What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20×20 grid?
 */
+#[allow(dead_code)]
 pub fn problem_11() -> i64 {
     let str = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00
@@ -32,8 +33,6 @@ pub fn problem_11() -> i64 {
     }
 
     let nrow: usize = 20;
-    let max_index = grid.len();
-
     let sweep_down = |i: usize| -> i64 {  grid[i] * grid[i+nrow] * grid[i+nrow*2] * grid[i+nrow*3] };
     let sweep_right = |i: usize| -> i64 {  grid[i] * grid[i+1] * grid[i+2] * grid[i+3] };
     let sweep_diag_right = |i: usize| -> i64 {  grid[i] * grid[i+nrow+1] * grid[i+nrow*2+2] * grid[i+nrow*3+3] };
@@ -70,8 +69,30 @@ pub fn problem_11() -> i64 {
 /*
 What is the value of the first triangle number to have over five hundred divisors?
 */
-pub fn problem_12() {
-
+pub fn problem_12() -> i64 {
+    let n = 500;
+    let mut i = 1;
+    let mut sum = 0;
+    let mut divisor_count;
+    loop {
+        sum += i;
+        divisor_count = 0;
+        let mut t = sum;
+        for k in 1..sum {
+            if k >= t { break }
+            if sum % k == 0 {
+                if k == sum / k { // perfect square
+                    divisor_count += 1;
+                } else {
+                    divisor_count += 2;
+                }
+                // println!("{} {}", k, sum / k);
+                t = sum / k;
+            }
+        }
+        // println!("divisor_count {} {} {}", divisor_count, i, sum);
+        if divisor_count >= n { break };
+        i += 1;
+    }
+    sum
 }
-
-//

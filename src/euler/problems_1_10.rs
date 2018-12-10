@@ -1,26 +1,5 @@
-use std::collections::HashSet;
 use std::cmp;
-
-// utils
-pub fn get_primes(n: i64) -> Vec<i64> {
-    let mut primes: Vec<i64> = vec!();
-    let mut not_primes = vec![1; (n+2) as usize];
-    let mut i = 2;
-    loop {
-        if not_primes[i] == 1 {
-            primes.push(i as i64);
-            let mut j = i;
-            loop {
-                j += i;
-                if j > (n as usize) { break }
-                not_primes[j] = 0;
-            }
-        }
-        i += 1;
-        if i > (n as usize) { break }
-    }
-    primes
-}
+use euler::utils::get_primes;
 
 
 
@@ -270,7 +249,7 @@ pub fn problem_10() -> i64 {
     s
 }
 
-
+#[allow(dead_code)]
 pub fn solutions() {
     let answer1 = problem_1();
     let answer2 = problem_2();
@@ -279,4 +258,20 @@ pub fn solutions() {
     let answer5 = problem_5();
     let answer6 = problem_6();
     let answer7 = problem_7();
+    let answer8 = problem_8();
+    let answer9 = problem_9();
+    let answer10 = problem_10();
+
+    println!("
+answer1: {}
+answer2: {}
+answer3: {}
+answer4: {}
+answer5: {}
+answer6: {}
+answer7: {}
+answer8: {}
+answer9: {}
+answer10: {}", answer1, answer2, answer3, answer4, answer5, answer6,
+    answer7, answer8, answer9, answer10);
 }

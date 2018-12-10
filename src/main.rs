@@ -1,9 +1,8 @@
-mod problems_11_20;
-
+mod euler;
 
 
 fn main() {
-    // solutions();
-    let answer = problems_11_20::problem_12();
+    // euler::problems_1_10::solutions();
+    let answer = euler::problems_11_20::problem_12();
     println!("{}", answer);
 }
