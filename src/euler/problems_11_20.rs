@@ -1,4 +1,5 @@
 use std::cmp;
+use std::collections::HashMap;
 
 /*
 What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20×20 grid?
@@ -215,5 +216,85 @@ pub fn problem_13() -> i64 {
     sum_t = sum_t + diff;
     sum_t.to_string()[0..10].parse().unwrap()
 }
+
+
+
+/*
+n -> n/2 (when n is even)
+n -> 3n + 1 (when n is odd)
+Which starting number, under one million, produces the longest chain?
+
+solution:
+use zero array of 1_000_000 * 3 + 1
+working backwards from 2 to (1_000_000 - 1)
+
+1 -> 2 -> 4 -> 8 -> 16 -> 5 -> 10 -> 20
+                                \
+                                3 -> 6
+*/
+
+/*
+rec fn with starting point and cache
+- check base case
+- check cache
+- get result of rec fn
+- set cache
+- return result
+*/
+pub fn fib_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
+    // base cases
+    if i == 0 { return 0; }
+    if i == 1 { return 1; }
+    // check cache
+    if cache.contains_key(&i) {
+        return *cache.get(&i).unwrap();
+    }
+    let result = fib_rec(i-2, cache) + fib_rec(i-1, cache);
+    // set cache
+    cache.insert(i, result);
+    result
+}
+
+pub fn collatz_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
+    // base case
+    if i < 2 { return 1 }
+    // check cache
+    match cache.get(&i) {
+        Some(&value) => return value,
+        _ => (),
+    }
+    let mut result;
+    if i % 2 == 0 {
+        result = collatz_rec(i/2, cache) + 1;
+    } else {
+        result = collatz_rec(3*i + 1, cache) + 1;
+    }
+    // set cache
+    cache.insert(i, result);
+    result
+}
+
+
+pub fn problem_14() -> i64 {
+    let n = 1_000_000;
+    let mut cache = HashMap::new();
+    for i in 0..n {
+        let f = collatz_rec(i, &mut cache);
+    }
+    let mut max_value = 0;
+    let mut max_key = 0;
+    for (&k, &v) in cache.iter() {
+        if v > max_value {
+            max_value = v;
+            max_key = k;
+        }
+    }
+    max_key
+}
+
+
+
+
+
 
 //
