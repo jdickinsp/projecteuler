@@ -34,9 +34,9 @@ pub fn problem_11() -> i64 {
     let nrow: usize = 20;
     let max_index = grid.len();
 
-    let sweep_down = |i: usize| -> i64 {  grid[i] * grid[i+nrow]  * grid[i+nrow*2] * grid[i+nrow*3] };
-    let sweep_right = |i: usize| -> i64 {  grid[i] * grid[i+1]  * grid[i+2] * grid[i+3] };
-    let sweep_diag_right = |i: usize| -> i64 {  grid[i] * grid[i+nrow+1]  * grid[i+nrow*2+2] * grid[i+nrow*3+3] };
+    let sweep_down = |i: usize| -> i64 {  grid[i] * grid[i+nrow] * grid[i+nrow*2] * grid[i+nrow*3] };
+    let sweep_right = |i: usize| -> i64 {  grid[i] * grid[i+1] * grid[i+2] * grid[i+3] };
+    let sweep_diag_right = |i: usize| -> i64 {  grid[i] * grid[i+nrow+1] * grid[i+nrow*2+2] * grid[i+nrow*3+3] };
     let sweep_diag_left = |i: usize| -> i64 {  grid[i] * grid[i+nrow-1]  * grid[i+nrow*2-2] * grid[i+nrow*3-3] };
     let mut max = 0;
 
@@ -64,3 +64,14 @@ pub fn problem_11() -> i64 {
     }
     max
 }
+
+
+
+/*
+What is the value of the first triangle number to have over five hundred divisors?
+*/
+pub fn problem_12() {
+
+}
+
+//

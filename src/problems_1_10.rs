@@ -9,7 +9,6 @@ pub fn get_primes(n: i64) -> Vec<i64> {
     loop {
         if not_primes[i] == 1 {
             primes.push(i as i64);
-            // assume its a prime
             let mut j = i;
             loop {
                 j += i;
