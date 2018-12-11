@@ -2,6 +2,29 @@ use std::cmp;
 use std::collections::HashMap;
 
 /*
+rec fn with starting point and cache
+- check base case
+- check cache
+- get result of rec fn
+- set cache
+- return result
+*/
+pub fn fib_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
+    // base cases
+    if i == 0 { return 0; }
+    if i == 1 { return 1; }
+    // check cache
+    if cache.contains_key(&i) {
+        return *cache.get(&i).unwrap();
+    }
+    let result = fib_rec(i-2, cache) + fib_rec(i-1, cache);
+    // set cache
+    cache.insert(i, result);
+    result
+}
+
+
+/*
 What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20×20 grid?
 */
 #[allow(dead_code)]
@@ -88,11 +111,9 @@ pub fn problem_12() -> i64 {
                 } else {
                     divisor_count += 2;
                 }
-                // println!("{} {}", k, sum / k);
                 t = sum / k;
             }
         }
-        // println!("divisor_count {} {} {}", divisor_count, i, sum);
         if divisor_count >= n { break };
         i += 1;
     }
@@ -223,38 +244,10 @@ pub fn problem_13() -> i64 {
 n -> n/2 (when n is even)
 n -> 3n + 1 (when n is odd)
 Which starting number, under one million, produces the longest chain?
-
-solution:
-use zero array of 1_000_000 * 3 + 1
-working backwards from 2 to (1_000_000 - 1)
-
 1 -> 2 -> 4 -> 8 -> 16 -> 5 -> 10 -> 20
                                 \
                                 3 -> 6
 */
-
-/*
-rec fn with starting point and cache
-- check base case
-- check cache
-- get result of rec fn
-- set cache
-- return result
-*/
-pub fn fib_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
-    // base cases
-    if i == 0 { return 0; }
-    if i == 1 { return 1; }
-    // check cache
-    if cache.contains_key(&i) {
-        return *cache.get(&i).unwrap();
-    }
-    let result = fib_rec(i-2, cache) + fib_rec(i-1, cache);
-    // set cache
-    cache.insert(i, result);
-    result
-}
-
 pub fn collatz_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
     // base case
     if i < 2 { return 1 }
@@ -293,7 +286,65 @@ pub fn problem_14() -> i64 {
 }
 
 
+/*
+Only able to move right and down to the bottom right corner.
+How many such routes are there through a 20×20 grid?
+- its a dag
+1 -> 2 -> 3
+|    |    |
+v    v    v
+4 -> 5 -> 6
+|    |    |
+v    v    v
+7 -> 8 -> 9
 
+so its a question of how many paths lead from source to destination.
+An adjancency matrix stores the edge coordinates,
+  1 - 2 - 3 - 4 - 5 - etc
+1     x       x
+2         x       x
+3
+4                 x
+
+matrix[out, in] = 1
+matrix[2, 5] = 1
+matrix[4, 5] = 1
+
+Using an adjacency list,
+adj_list[1] = [2, 4]
+adj_list[2] = [3, 5]
+adj_list[3] = [6]
+adj_list[4] = [5, 7]
+adj_list[5] = [6, 8]
+adj_list[6] = [9]
+adj_list[7] = [8]
+adj_list[8] = [9]
+adj_list[9] = []
+
+To traverse through all the paths, start at 1.
+- base case, when it reaches an empty list
+- check check, if visited
+- get results, visit next edges
+- cache results
+- return results
+
+fn visit_rec(i) {
+    if adj_list[i].len() == 0 {
+        return 1;
+    }
+    edges = adj_list[i]
+    for e in edges:
+        visit_rec(e)
+    return 1
+}
+
+*/
+pub fn problem_15() -> i64 {
+    let n = 3*3;
+    let mut matrix: Vec<i64> = (1..n).collect();
+    println!("{:?}", matrix);
+    0
+}
 
 
 
