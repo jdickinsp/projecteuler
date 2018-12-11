@@ -121,7 +121,9 @@ pub fn problem_12() -> i64 {
 }
 
 
-
+/*
+Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+*/
 pub fn problem_13() -> i64 {
     let numbers_str = "37107287533902102798797998220837590246510135740250
 46376937677490009712648124896970078050417018260538
@@ -249,9 +251,7 @@ Which starting number, under one million, produces the longest chain?
                                 3 -> 6
 */
 pub fn collatz_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
-    // base case
     if i < 2 { return 1 }
-    // check cache
     match cache.get(&i) {
         Some(&value) => return value,
         _ => (),
@@ -262,7 +262,6 @@ pub fn collatz_rec(i: i64, cache: &mut HashMap<i64, i128>) -> i128 {
     } else {
         result = collatz_rec(3*i + 1, cache) + 1;
     }
-    // set cache
     cache.insert(i, result);
     result
 }
