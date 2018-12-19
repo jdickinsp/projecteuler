@@ -351,7 +351,7 @@ pub fn count_paths(edges: &AdjList, n: i128) -> i128 {
 }
 
 pub fn problem_15() -> i128 {
-    let n = 50+1;
+    let n = 20+1;
     let mut outgoing = create_graph_p15(n);
     // reverse as incoming edges
     let incoming = reverse_edges(&mut outgoing);
