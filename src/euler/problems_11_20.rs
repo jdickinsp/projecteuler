@@ -285,6 +285,7 @@ pub fn problem_14() -> i64 {
 }
 
 
+type AdjList = HashMap<i128, Vec<i128>>;
 /*
 Only able to move right and down to the bottom right corner.
 How many such routes are there through a 20×20 grid?
@@ -297,54 +298,66 @@ v    v    v
 v    v    v
 7 -> 8 -> 9
 
-so its a question of how many paths lead from source to destination.
-An adjancency matrix stores the edge coordinates,
-  1 - 2 - 3 - 4 - 5 - etc
-1     x       x
-2         x       x
-3
-4                 x
-
-matrix[out, in] = 1
-matrix[2, 5] = 1
-matrix[4, 5] = 1
-
-Using an adjacency list,
-adj_list[1] = [2, 4]
-adj_list[2] = [3, 5]
-adj_list[3] = [6]
-adj_list[4] = [5, 7]
-adj_list[5] = [6, 8]
-adj_list[6] = [9]
-adj_list[7] = [8]
-adj_list[8] = [9]
-adj_list[9] = []
-
-To traverse through all the paths, start at 1.
-- base case, when it reaches an empty list
-- check check, if visited
-- get results, visit next edges
-- cache results
-- return results
-
-fn visit_rec(i) {
-    if adj_list[i].len() == 0 {
-        return 1;
-    }
-    edges = adj_list[i]
-    for e in edges:
-        visit_rec(e)
-    return 1
-}
-
+the solution is to backtrack the count,
+you know
+f(1) = 1
+f(2) = f(1)
+f(5) = f(4) + f(5)
+f(9) = f(6) + f(8)
 */
-pub fn problem_15() -> i64 {
-    let n = 3*3;
-    let mut matrix: Vec<i64> = (1..n).collect();
-    println!("{:?}", matrix);
-    0
+pub fn create_graph_p15(n: i128) -> AdjList {
+    let total = n*n;
+    let mut outgoing: AdjList = HashMap::new();
+    for i in 1..(total+1) {
+        outgoing.insert(i, Vec::new());
+        if i < 1 { continue }
+        if i % n != 0 {
+            let m = i + 1;
+            outgoing.entry(i).or_insert(Vec::new()).push(m);
+        }
+        // not on last row
+        if i < (n * (n-1) + 1) {
+            let m = i + n;
+            outgoing.entry(i).or_insert(Vec::new()).push(m);
+        }
+    }
+    outgoing
 }
 
+pub fn reverse_edges(edges: &mut AdjList) -> AdjList {
+    let mut in_edges: AdjList = HashMap::new();
+    for (key, value) in edges.iter() {
+        for i in value.iter() {
+            in_edges.entry(*i).or_insert(Vec::new()).push(*key);
+        }
+    }
+    in_edges
+}
+
+pub fn count_paths(edges: &AdjList, n: i128) -> i128 {
+    let mut npaths = HashMap::new();
+    // base case
+    npaths.insert(1, 1);
+    for i in 2..(n*n+1) {
+        let count_iter = edges.get(&i).unwrap().iter();
+        let mut count = 0;
+        for k in count_iter {
+            count += npaths.get(k).unwrap();
+        }
+        npaths.insert(i, count);
+    }
+    let index = n*n;
+    *npaths.get(&index).unwrap()
+}
+
+pub fn problem_15() -> i128 {
+    let n = 50+1;
+    let mut outgoing = create_graph_p15(n);
+    // reverse as incoming edges
+    let incoming = reverse_edges(&mut outgoing);
+    let npaths = count_paths(&incoming, n);
+    npaths
+}
 
 
 //
