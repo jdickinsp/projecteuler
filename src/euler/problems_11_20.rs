@@ -1,5 +1,6 @@
 use std::cmp;
 use std::collections::HashMap;
+use euler::bigint;
 
 /*
 rec fn with starting point and cache
@@ -359,5 +360,18 @@ pub fn problem_15() -> i128 {
     npaths
 }
 
+
+pub fn problem_16() -> i128 {
+    let x = bigint::big_exponential(2, 1000);
+    let y = x.value();
+    let mut accum = 0;
+    for i in 0..y.len() {
+        let ch = y.chars().nth(i).unwrap();
+        accum += ch.to_digit(10).unwrap();
+    }
+    println!("total: {}", accum);
+    println!("y: {:?}", y);
+    accum as i128
+}
 
 //

@@ -1,5 +1,6 @@
 pub mod problems_1_10;
 pub mod problems_11_20;
+pub mod bigint;
 
 pub mod utils {
     pub fn get_primes(n: i64) -> Vec<i64> {
