@@ -45,6 +45,7 @@ impl BigInt {
             let rem = s % 100_000_000;
             sum.push(rem);
         }
+        if carry > 0 { sum.push(carry) };
         BigInt{ chunks: sum }
     }
     fn multiply(&self, b: &BigInt) -> BigInt {
