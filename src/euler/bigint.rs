@@ -5,17 +5,18 @@ big integer class
 - supports add and multiply
 */
 
+const CHUNK_SIZE: usize = 8;
+
 // split string into chunk size integers
 fn split_chunks(val: &str) -> Vec<i64> {
-    let c_size = 8;
     let mut parts = vec!();
     let mut j = val.len();
-    let mut i = if j > c_size { j - c_size } else { 0 };
+    let mut i = if j > CHUNK_SIZE { j - CHUNK_SIZE } else { 0 };
     while j > 0 {
         let part = &val[i..j];
         parts.push(part.parse::<i64>().unwrap());
         j = i;
-        i = if i > c_size { i - c_size } else { 0 };
+        i = if i > CHUNK_SIZE { i - CHUNK_SIZE } else { 0 };
     }
     parts
 }
@@ -41,8 +42,8 @@ impl BigInt {
             let y = if i < b.chunks.len() { b.chunks[i] } else { 0 };
             let s = x + y + carry;
             // check overflow
-            carry = s / (100_000_000);
-            let rem = s % 100_000_000;
+            carry = s / (i64::pow(10, CHUNK_SIZE as u32));
+            let rem = s % i64::pow(10, CHUNK_SIZE as u32);
             sum.push(rem);
         }
         if carry > 0 { sum.push(carry) };
@@ -62,8 +63,8 @@ impl BigInt {
                 let x = if i < self.chunks.len() { self.chunks[i] } else { 1 };
                 let y = b.chunks[j];
                 let s = x * y + carry;
-                carry = s / (100_000_000);
-                let rem = s % 100_000_000;
+                carry = s / (i64::pow(10, CHUNK_SIZE as u32));
+                let rem = s % i64::pow(10, CHUNK_SIZE as u32);
                 sum.push(rem);
             }
             if carry > 0 { sum.push(carry) };
@@ -78,7 +79,7 @@ impl BigInt {
     pub fn value(&self) -> String {
         let mut digits = vec!();
         for (i, chunk) in self.chunks.iter().enumerate().rev() {
-            let valstr = if i == self.chunks.len() - 1 { chunk.to_string() } else { format!("{:08}", chunk) };
+            let valstr = if i == self.chunks.len() - 1 { chunk.to_string() } else { format!("{:02}", chunk) };
             digits.push(valstr);
         }
         digits.join("")
