@@ -481,8 +481,7 @@ pub fn find_max_path(graph: &str) -> i128 {
         }
     }
     // maximum path sum is accumulated at the origin
-    let max = *maxvalues.get(&(0, 0)).unwrap();
-    max
+    *maxvalues.get(&(0, 0)).unwrap()
 }
 
 
