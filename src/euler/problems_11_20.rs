@@ -409,3 +409,100 @@ pub fn problem_17() -> i128 {
     let t = t_1_99 + t_100_999 + 11;
     t
 }
+
+
+/*
+maximum path
+*/
+type AdjListPos = HashMap<(usize, usize), Vec<(usize, usize)>>;
+
+pub fn reverse_edges_tuples(edges: &mut AdjListPos) -> AdjListPos {
+    let mut in_edges: AdjListPos = HashMap::new();
+    for (key, value) in edges.iter() {
+        for i in value.iter() {
+            in_edges.entry(*i).or_insert(Vec::new()).push(*key);
+        }
+    }
+    in_edges
+}
+
+pub fn find_max_path(graph: &str) -> i128 {
+    let line_strings: Vec<&str> = graph.split("\n").map(|s| s.trim()).collect();
+    let mut list = vec!();
+    // parse into vector
+    for line in line_strings.iter() {
+        let arrayline: Vec<i128> = line.split_whitespace().filter_map(|s| s.parse::<i128>().ok()).collect();
+        if arrayline.len() > 0 {
+            list.push(arrayline);
+        }
+    }
+    // generate adjacency list of graph
+    let mut adjlist: AdjListPos = HashMap::new();
+    let mut maxvalues: HashMap<(usize, usize), i128> = HashMap::new();
+    let mut maxpaths: HashMap<(usize, usize), (usize, usize)> = HashMap::new();
+    for (i, row) in list.iter().enumerate().rev() {
+        for (j, value) in row.iter().enumerate() {
+            let pos = (i, j);
+            if i == 0 {
+                adjlist.insert(pos, Vec::new());
+            }
+            else {
+                if j == 0 {
+                    adjlist.entry(pos).or_insert(Vec::new()).push((i-1, j));
+                } else if j < i {
+                    adjlist.entry(pos).or_insert(Vec::new()).push((i-1, j-1));
+                    adjlist.entry(pos).or_insert(Vec::new()).push((i-1, j));
+                } else {
+                    adjlist.entry(pos).or_insert(Vec::new()).push((i-1, j-1));
+                }
+            }
+             maxvalues.entry(pos).or_insert(*value);
+        }
+    }
+    let reversed_edges = reverse_edges_tuples(&mut adjlist);
+    // find max path bottom up to top
+    for (i, row) in list.iter().enumerate().rev() {
+        for (j, item) in row.iter().enumerate() {
+            let node = (i, j);
+            match reversed_edges.get(&node) {
+                Some(positions) => {
+                    let mut max_value = 0;
+                    for pos in positions {
+                        let val = *maxvalues.get(pos).unwrap();
+                        if val > max_value {
+                            max_value = val;
+                        }
+                    }
+                    let node_val = list[i][j];
+                    maxvalues.insert(node, max_value + node_val);
+                },
+                None => ()
+            }
+        }
+    }
+    // maximum path sum is accumulated at the origin
+    let max = *maxvalues.get(&(0, 0)).unwrap();
+    max
+}
+
+
+pub fn problem_18() -> i128 {
+    let triangle_str = "
+    75
+    95 64
+    17 47 82
+    18 35 87 10
+    20 04 82 47 65
+    19 01 23 75 03 34
+    88 02 77 73 07 63 67
+    99 65 04 28 06 16 70 92
+    41 41 26 56 83 40 80 70 33
+    41 48 72 33 47 32 37 16 94 29
+    53 71 44 65 25 43 91 52 97 51 14
+    70 11 33 28 77 73 17 78 39 68 17 57
+    91 71 52 38 17 14 91 43 58 50 27 29 48
+    63 66 04 68 89 53 67 30 73 16 69 87 40 31
+    04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
+    ";
+    find_max_path(triangle_str)
+}
